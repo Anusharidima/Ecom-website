@@ -77,12 +77,8 @@
                 <div class="card">
                     <img src="{{ product.image }}" class="card-img-top">
                     <div class="card-body">
-                        <div id="nm{{product.id}}" class="card-title">
-                            {{product.title}}
-                        </div>
-                        <div id="price{{product.id}}" class="card-text">
-                             $ {{product.price}}
-                        </div>
+                        <div id="nm{{product.id}}" class="card-title">{{product.title}}</div>
+                        <div id="price{{product.id}}" class="card-text">{{product.price}}</div>
                         <a href="/{{product.id}}" class="btn btn-warning">View</a>
                         <button id="{{product.id}}" class="btn atc btn-warning">Add to Cart</button>
                     </div>
@@ -128,11 +124,19 @@
         var item_id = this.id.toString();
         console.log(item_id);
  
-        if (cart[item_id] != undefined) {
-            cart[item_id] = cart[item_id] + 1;
+        if (cart[item_id]!=undefined) {
+            quantity = cart[item_id][0] +1;
+            cart[item_id][0] = quantity;
+            cart[item_id][2] = cart[item_id][2] + parseFloat(document.getElementById("price"+item_id).innerHTML);
+
         }
         else {
-            cart[item_id] = 1;
+            quantity = 1;
+            price = parseFloat(document.getElementById("price"+item_id).innerHTML);
+            name = document.getElementById('nm'+item_id).innerHTML;
+            cart[item_id]=[quantity,name,price];
+
+
         }
         console.log(cart);
  
@@ -155,7 +159,7 @@
             cartString += cartObject[item][1] + "Qty: " + cartObject[item][0] + "</br>"
             
         }
-
+        cartString += "<a href = '/checkout'><button class='btn btn-warning' id='checkout'>checkout</button></a>";
         document.getElementById("cart").setAttribute('data-content',cartString);
         $('[data-toggle="popover"]').popover();
     }
